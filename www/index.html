@@ -41,6 +41,15 @@
         })
     }
 
+    function searchDefence() {
+      let defence = parseInt($("#defence").val());
+      let TestDataClass = ncmb.DataStore(db);
+      TestDataClass.greaterThan("defence",defence).fetchAll()
+        .then(function(results) {
+          showResults(results);
+        })
+    }
+
     function searchLevel() {
       let level = parseInt($("#level").val());
       let TestDataClass = ncmb.DataStore(db);
@@ -98,13 +107,18 @@
     <input id="level" type="number" placeholder="monster level">
   </div>
   <div>
-    <label for="level">attack:</label>
+    <label for="attack">attack:</label>
     <input id="attack" type="number" placeholder="attack">
+  </div>
+  <div>
+    <label for="defence">defence:</label>
+    <input id="defence" type="number" placeholder="defence">
   </div>
   <div id="button">
     <button class="btn" onclick="fetchAll()">Fetch All</button>
     <button class="btn" onclick="searchName()">Name</button><br>
-    <button class="btn" onclick="searchAtack()">attack</button><br>
+    <button class="btn" onclick="searchAtack()">attack</button>
+    <button class="btn" onclick="searchDefence()">defence</button><br>
     <button class="btn" onclick="searchLevelLT()">Level &lt</button>
     <button class="btn" onclick="searchLevel()">Level</button>
     <button class="btn" onclick="searchLevelGT()">Level &gt</button>
