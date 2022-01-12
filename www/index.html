@@ -13,18 +13,24 @@
     // NCMB アクセスの準備
     let ncmb = new NCMB(appKey, clientKey);
     // 本アプリで使うクラスの指定。const は定数の宣言。変更できない変数と思えば良い。
-    var TestClass = ncmb.DataStore("monster");
+    var TestClass = ncmb.DataStore("ms");
 
     function register(){
       var testClass = new TestClass();
       var key = $("#field").val();
       var value = $("#value").val();
       testClass.set(key, value);
-      testClass.save();
+      testClass.save().
+      then(function(m) {
+        $("#message").html("New object created with objectId: " + testClass.objectId);
+      })
+      .catch(function(err){
+        $("#message").html("Failed to create new object, with error code: " + JSON.stringify(err));
+      })
     }
 
     function fetchAll() {
-      let TestDataClass = ncmb.DataStore("monster");
+      let TestDataClass = ncmb.DataStore("ms");
       TestDataClass.order("name",false).fetchAll()
         .then(function(results) {
           showResults(results);
@@ -33,26 +39,8 @@
 
     function searchName() {
       let name = $("#name").val();
-      let TestDataClass = ncmb.DataStore("monster");
+      let TestDataClass = ncmb.DataStore("ms");
       TestDataClass.equalTo("name",name).fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
-    function searchAtack() {
-      let attack = parseInt($("#attack").val());
-      let TestDataClass = ncmb.DataStore("monster");
-      TestDataClass.greaterThan("attack",attack).fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
-    function searchDefence() {
-      let defence = parseInt($("#defence").val());
-      let TestDataClass = ncmb.DataStore("monster");
-      TestDataClass.greaterThan("defence",defence).fetchAll()
         .then(function(results) {
           showResults(results);
         })
@@ -87,14 +75,12 @@
 
     function showResults(results) {
       // テーブルのヘッダを生成
-      let msg = "<table><tr><th>name</th><th>Lvl</th><th>attack</th><th>defence</th></tr>";
+      let msg = "<table><tr><th>name</th><th>Lvl</th>";
       for (let i = 0; i < results.length; i++) {
         // 各データを収めた表の列を生成
         msg += "<tr>";
         msg += "<td>" + results[i].name + "</td>";
         msg += "<td class='num'>" + results[i].level + "</td>";
-        msg += "<td class='num'>" + results[i].attack + "</td>";
-        msg += "<td class='num'>" + results[i].defence + "</td>";
         msg += "</tr>";
       }
       // テーブルのテイラを生成
@@ -105,7 +91,7 @@
 </head>
 
 <body>
-  <h1>mBaaS search</h1>
+  <h1>monster</h1>
  <div>
     <label for="field">field:</label>
     <input id="field" type="text" >
@@ -113,6 +99,14 @@
    <div>
     <label for="value">name:</label>
     <input id="value" type="text" placeholder="monster name">
+  </div> 
+  <div>
+    <label for="field2">field:</label>
+    <input id="field2" type="text" >
+  </div>
+   <div>
+    <label for="value2">level:</label>
+    <input id="value2" type="number" placeholder="monster level">
   </div>
   <div>search</div>
   <div>
@@ -123,21 +117,11 @@
     <label for="level">level:</label>
     <input id="level" type="number" placeholder="monster level">
   </div>
-  <div>
-    <label for="attack">attack:</label>
-    <input id="attack" type="number" placeholder="attack">
-  </div>
-  <div>
-    <label for="defence">defence:</label>
-    <input id="defence" type="number" placeholder="defence">
-  </div>
   
   <div id="button">
-    <button class="btn" onclick="register()">register</button><br>
+    <button class="btn" onclick="register()">register</button>
     <button class="btn" onclick="fetchAll()">Fetch All</button>
-    <button class="btn" onclick="searchName()">Name</button>
-    <button class="btn" onclick="searchAtack()">attack</button>
-    <button class="btn" onclick="searchDefence()">defence</button><br>
+    <button class="btn" onclick="searchName()">Name</button><br>
     <button class="btn" onclick="searchLevelLT()">Level &lt</button>
     <button class="btn" onclick="searchLevel()">Level</button>
     <button class="btn" onclick="searchLevelGT()">Level &gt</button>
