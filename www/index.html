@@ -46,41 +46,14 @@
         })
     }
 
-    function searchLevel() {
-      let level = parseInt($("#level").val());
-      let TestDataClass = ncmb.DataStore(monster);
-      TestDataClass.equalTo("level",level).fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
-    function searchLevelLT() {
-      let level = parseInt($("#level").val());
-      let TestDataClass = ncmb.DataStore(monster);
-      TestDataClass.lessThan("level",level).fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
-
-    function searchLevelGT() {
-      let level = parseInt($("#level").val());
-      let TestDataClass = ncmb.DataStore(monster);
-      TestDataClass.greaterThan("level",level).fetchAll()
-        .then(function(results) {
-          showResults(results);
-        })
-    }
 
     function showResults(results) {
       // テーブルのヘッダを生成
-      let msg = "<table><tr><th>name</th><th>Lvl</th>";
+      let msg = "<table><tr><th>name</th>";
       for (let i = 0; i < results.length; i++) {
         // 各データを収めた表の列を生成
         msg += "<tr>";
         msg += "<td>" + results[i].name + "</td>";
-        msg += "<td class='num'>" + results[i].level + "</td>";
         msg += "</tr>";
       }
       // テーブルのテイラを生成
@@ -100,31 +73,16 @@
     <label for="value">name:</label>
     <input id="value" type="text" placeholder="monster name">
   </div> 
-  <div>
-    <label for="field2">field:</label>
-    <input id="field2" type="text" >
-  </div>
-   <div>
-    <label for="value2">level:</label>
-    <input id="value2" type="number" placeholder="monster level">
-  </div>
   <div>search</div>
   <div>
     <label for="name">name:</label>
     <input id="name" type="text" placeholder="monster name">
-  </div>
-  <div>
-    <label for="level">level:</label>
-    <input id="level" type="number" placeholder="monster level">
   </div>
   
   <div id="button">
     <button class="btn" onclick="register()">register</button>
     <button class="btn" onclick="fetchAll()">Fetch All</button>
     <button class="btn" onclick="searchName()">Name</button><br>
-    <button class="btn" onclick="searchLevelLT()">Level &lt</button>
-    <button class="btn" onclick="searchLevel()">Level</button>
-    <button class="btn" onclick="searchLevelGT()">Level &gt</button>
   </div>
   <div id="message">message area</div>
 </body>
